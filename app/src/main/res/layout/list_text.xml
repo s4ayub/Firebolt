@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+The view used inside the list view in the main activity to display each
+BT connection
+-->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:gravity="center_vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <TextView
+        android:id="@+id/list_content"
+        android:textColor="#FFF"
+        android:gravity="center"
+        android:layout_margin="4dip"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        />
+</LinearLayout>

@@ -1,11 +1,12 @@
 package aluminumvalley.fireboltcontroller;
 
 import android.app.ProgressDialog;
-import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -46,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
         timerTest = (TextView)findViewById(R.id.testTimer);
         message = (TextView)findViewById(R.id.message);
 
+        Typeface customFont = Typeface.createFromAsset(getAssets(),  "fonts/LobsterTwo-Regular.ttf");
+        message.setTypeface(customFont);
 
         //Takes selected device and goes to the next activity
         selectorButton = (Button)findViewById(R.id.selector_button);
@@ -98,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
 
             );
 
-
+        /*  IGNORE THIS FOR NOW
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter == null) {
             // Device does not support Bluetooth
@@ -106,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         }
+        */
 
     }
 
@@ -114,9 +118,13 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
     }
 
+    /**
+     * After BT connections are found, display all the found connections
+     */
     private void finishedSearching(){
         mProgress.dismiss();
         message.setText("Availible Connections");
+        message.setTextSize(TypedValue.COMPLEX_UNIT_PX,getResources().getDimension(R.dimen.secondary_title));
         startBTSearchButton.setVisibility(View.INVISIBLE);
         selectorButton.setVisibility(View.VISIBLE);
 
@@ -131,17 +139,17 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 this,
-                android.R.layout.simple_list_item_1,
+                R.layout.list_text,
+                R.id.list_content,
                 foundDevices);
 
         deviceList.setAdapter(arrayAdapter);
-
         deviceList.setVisibility(View.VISIBLE);
     }
 
     private void newTimer(){
 
-        new CountDownTimer(6000, 1000) {
+        new CountDownTimer(4000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 timerTest.setText("seconds remaining: " + millisUntilFinished / 1000);

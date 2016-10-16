@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#AD974F</color>
-    <color name="colorPrimaryDark">#8E793E</color>
-    <color name="colorAccent">#EAEAEA</color>
-    <color name="colorDark">#231F20</color>
-    <color name="colorLight">#CCCCCC</color>
 
-    <color name="highlight">#add8e6</color>
+    <!-- Colors for layouts -->
+    <color name="colorPrimary">#393939</color>
+    <color name="colorPrimaryDark">#231F20</color>
+    <color name="colorAccent">#FFDC00</color>
+
+    <color name="highlight">#FFDC00</color>
+
+    <!-- Colors for text -->
+
+
 </resources>

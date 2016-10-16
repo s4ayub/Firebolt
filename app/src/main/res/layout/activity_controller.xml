@@ -1,18 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <include
-        layout="@layout/main_bar"
-        android:id="@+id/main_bar"/>
+        android:id="@+id/main_bar"
+        layout="@layout/main_bar" />
 
-    <TextView
-        android:id="@+id/currentSelectedDevice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <RelativeLayout
+        android:id="@+id/display_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        android:text="device"
-        />
+
+        <!-- MAIN PANEL -->
+        <LinearLayout
+            android:id="@+id/main_panel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/currentSelectedDevice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Device Number"
+                android:textColor="#000" />
+
+            <Button
+                android:id="@+id/main_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="off" />
+
+        </LinearLayout>
+
+        <!-- BOARD CONTROL PANEL -->
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/main_panel">
+
+            <Button
+                android:id="@+id/forward_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Forward"/>
+
+            <Button
+                android:id="@+id/backwards_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/forward_button"
+                android:text="Backward"/>
+
+            <SeekBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
 
 </LinearLayout>

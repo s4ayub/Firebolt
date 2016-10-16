@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--
+Used for the list view on the main activity
+Changes colour based on the pressed/selected state when
+user interacts with the list view
+-->
+
 <selector xmlns:android="http://schemas.android.com/apk/res/android"
     android:exitFadeDuration="@android:integer/config_mediumAnimTime">
 

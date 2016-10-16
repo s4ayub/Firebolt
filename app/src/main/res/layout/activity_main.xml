@@ -1,83 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--
+Very first screen user sees when opening the app
+-->
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background1"
+    android:background="@drawable/gradient"
     tools:context="aluminumvalley.fireboltcontroller.MainActivity">
 
     <TextView
         android:id="@+id/testTimer"
-        android:layout_below="@id/main_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#FFF"
-        android:text="Time"/>
+        android:layout_below="@id/main_bar"
+        android:text="Time"
+        android:textColor="#FFF" />
 
     <ListView
         android:id="@+id/device_list"
         android:layout_width="300dp"
         android:layout_height="100dp"
         android:layout_centerInParent="true"
-
+        android:layout_margin="30dp"
         android:background="?android:attr/activatedBackgroundIndicator"
-
         android:choiceMode="singleChoice"
+        android:visibility="invisible">
 
-        android:visibility="invisible"
 
-
-        >
     </ListView>
 
     <TextView
         android:id="@+id/message"
-        android:layout_above="@id/device_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@id/device_list"
         android:layout_centerHorizontal="true"
-
-        android:textColor="#FFF"
-        android:text="Welcome to Firebolt"/>
+        android:text="Firebolt"
+        android:textColor="@color/highlight"
+        android:textSize="@dimen/primary_title"/>
 
     <TextView
         android:id="@+id/device_name"
-        android:layout_below="@id/device_list"
-        android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
-        android:textColor="#FFF"
-        android:text="Device: "/>
+        android:layout_below="@id/device_list"
+        android:layout_centerHorizontal="true"
+        android:text="Device: "
+        android:textColor="#FFF" />
 
 
     <Button
         android:id="@+id/selector_button"
-        android:layout_below="@id/device_name"
-        android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/device_name"
+        android:layout_centerHorizontal="true"
 
         android:text="Select and Continue"
         android:textAllCaps="false"
 
-        android:visibility="invisible"
-        />
+        android:visibility="invisible" />
 
     <Button
         android:id="@+id/start_bt_button"
-        android:layout_below="@id/device_name"
-        android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/device_name"
+        android:layout_centerHorizontal="true"
 
         android:text="Search for BT Devices"
         android:textAllCaps="false"
 
-        android:visibility="visible"/>
-
-
-
+        android:visibility="visible" />
 
 
 </RelativeLayout>

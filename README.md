@@ -1,2 +1,2 @@
 # Firebolt
-A flux sensor controlled longboard. 
+An electric longboard controlled by an android app!

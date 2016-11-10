@@ -47,10 +47,9 @@ public class ControllerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 if(deviceConnected){
-                    String msg = "TESTING";
-                    msg += "\n";
+                    byte msg = 1;
                     try {
-                        mmOutputStream.write(msg.getBytes());
+                        mmOutputStream.write(msg);
                     }catch(Exception e){
                         Log.e("ERROR IS: ", e.toString());
                     }

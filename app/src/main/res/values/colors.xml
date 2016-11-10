@@ -6,9 +6,9 @@
     <color name="colorPrimaryDark">#231F20</color>
     <color name="colorAccent">#FFDC00</color>
 
-    <color name="highlight">#FFDC00</color>
+    <color name="highlight">#FF1A00</color>
 
     <!-- Colors for text -->
-
+    <color name="title">#FFFFFF</color>
 
 </resources>

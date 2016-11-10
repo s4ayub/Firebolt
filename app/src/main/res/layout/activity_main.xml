@@ -8,7 +8,7 @@ Very first screen user sees when opening the app
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient"
+    android:background="@drawable/true_background"
     tools:context="aluminumvalley.fireboltcontroller.MainActivity">
 
     <ListView
@@ -17,7 +17,7 @@ Very first screen user sees when opening the app
         android:layout_height="100dp"
         android:layout_centerInParent="true"
         android:layout_margin="30dp"
-        android:background="?android:attr/activatedBackgroundIndicator"
+        android:background="@drawable/true_background"
         android:choiceMode="singleChoice"
         android:visibility="invisible">
 
@@ -31,7 +31,7 @@ Very first screen user sees when opening the app
         android:layout_above="@id/device_list"
         android:layout_centerHorizontal="true"
         android:text="Firebolt"
-        android:textColor="@color/highlight"
+        android:textColor="#FFFFFF"
         android:textSize="@dimen/primary_title"/>
 
     <TextView

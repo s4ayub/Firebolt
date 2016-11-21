@@ -3,10 +3,14 @@ package aluminumvalley.fireboltcontroller;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,7 +19,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -29,18 +32,18 @@ public class MainActivity extends AppCompatActivity {
     TextView timerTest;
     TextView message;
     TextView deviceName;
+    ProgressDialog mProgress;
+    ListView deviceList;
 
     BluetoothDevice selectedDevice;
     String selectedDeviceName;
 
-    ProgressDialog mProgress;
-
-    ListView deviceList;
     Set<BluetoothDevice> pairedDevices;
-    List<String> foundDevices;
+    Set<BluetoothDevice> discoveredDevices;
+    List<String> listAllDevices;
 
     Button selectorButton;
-    Button startBTSearchButton;
+    Button searchBTButton;
 
     BluetoothAdapter mBluetoothAdapter;
 
@@ -64,8 +67,6 @@ public class MainActivity extends AppCompatActivity {
 
                                                   if(selectedDevice != null) {
 
-                                                      //CONNECT TO DEVICE
-
                                                       Intent i = new Intent(MainActivity.this, ControllerActivity.class);
                                                       i.putExtra("BTDevice", selectedDevice);
                                                       startActivity(i);
@@ -76,8 +77,8 @@ public class MainActivity extends AppCompatActivity {
         );
 
         //Start the bluetooth search
-        startBTSearchButton = (Button) findViewById(R.id.start_bt_button);
-        startBTSearchButton.setOnClickListener(new View.OnClickListener() {
+        searchBTButton = (Button) findViewById(R.id.start_bt_button);
+        searchBTButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -92,7 +93,8 @@ public class MainActivity extends AppCompatActivity {
                     Intent enableBT = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                     startActivityForResult(enableBT, REQUEST_ENABLE_BT);
 
-                    //SET A TIMER?? Display on test timer
+                    searchForConnections();
+                } else if (mBluetoothAdapter.isEnabled()){
                     searchForConnections();
                 }
             }
@@ -121,6 +123,13 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     }
                 }
+
+                for (BluetoothDevice device : discoveredDevices) {
+                    if(device.getName().equals(selectedDeviceName)) {
+                        selectedDevice = device;
+                        break;
+                    }
+                }
             }
         }
 
@@ -133,22 +142,43 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
     }
 
-    /**
-     * After BT connections are found, display all the found connections
-     */
+
     private void searchForConnections() {
 
-        foundDevices = new ArrayList<String>();
+        //Wait until state is 12 (Turned On)
+        while(mBluetoothAdapter.getState() != 12){
+            Log.e("Current State: ", String.valueOf(mBluetoothAdapter.getState()));
+        }
+
+        //Get paired Bluetooth Devices
+        listAllDevices.add("Paired Devices"); //TODO Remove
         pairedDevices = mBluetoothAdapter.getBondedDevices();
         if (pairedDevices.size() > 0) {
             for (BluetoothDevice device : pairedDevices) {
-                foundDevices.add(device.getName());
+                listAllDevices.add(device.getName());
             }
         }
 
-        message.setText("Availible Connections");
+        listAllDevices.add("Discovered Devices"); //TODO Remove
+        //Get all available Bluetooth Devices that the phone can discover
+        BroadcastReceiver mReceiver = new BroadcastReceiver() {
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+                // When discovery finds a device
+                if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                    // Get the BluetoothDevice object from the Intent
+                    BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                    discoveredDevices.add(device);
+                    listAllDevices.add(device.getName());
+                }
+            }
+        };
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        registerReceiver(mReceiver, filter); // TODO Don't forget to unregister during onDestroy
+
+        message.setText("Available Connections");
         message.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.secondary_title));
-        startBTSearchButton.setVisibility(View.INVISIBLE);
+        searchBTButton.setVisibility(View.INVISIBLE);
         selectorButton.setVisibility(View.VISIBLE);
 
 
@@ -156,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
                 this,
                 R.layout.list_text,
                 R.id.list_content,
-                foundDevices);
+                listAllDevices);
 
         deviceList.setAdapter(arrayAdapter);
 

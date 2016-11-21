@@ -57,6 +57,19 @@ public class ControllerActivity extends AppCompatActivity {
             }
         });
         backwardButton = (Button) findViewById(R.id.backwards_button);
+        backwardButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                if(deviceConnected){
+                    byte msg = -1;
+                    try {
+                        mmOutputStream.write(msg);
+                    }catch(Exception e){
+                        Log.e("ERROR IS: ", e.toString());
+                    }
+                }
+            }
+        });
 
         powerControl = (SeekBar) findViewById(R.id.power_control_bar);
         powerControl.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {

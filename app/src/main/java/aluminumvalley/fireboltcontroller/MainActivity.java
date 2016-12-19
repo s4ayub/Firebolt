@@ -73,40 +73,20 @@ public class MainActivity extends AppCompatActivity {
         //HIGHLIGHT DOESNT REMAIN: FIX
         deviceList.setSelector(R.drawable.device_selector);
         deviceList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                                                       long arg3) {
-                view.setSelected(true);
-                selectedDeviceName = (String) parent.getItemAtPosition(position);
+                    view.setSelected(true);
+                    selectedDeviceName = (String) parent.getItemAtPosition(position);
 
-                if(selectedDeviceName.equals(PAIRED_DEVICES)||selectedDeviceName.equals(DISCOVERED_DEVICES)){
-                    deviceName.setText(NO_DEVICE);
-                }else {
-                    deviceName.setText("Device: " + selectedDeviceName);
-
-                    //IS THERE A BETTER WAY??
-                    if(pairedDevices != null) {
-                        for (BluetoothDevice device : pairedDevices) {
-                            if (device.getName().equals(selectedDeviceName)) {
-                                selectedDevice = device;
-                                break;
-                            }
-                        }
-                    }
-
-                    if(discoveredDevices != null) {
-                        for (BluetoothDevice device : discoveredDevices) {
-                            if (device.getName().equals(selectedDeviceName)) {
-                                selectedDevice = device;
-                                break;
-                            }
-                        }
+                    if(selectedDeviceName.equals(PAIRED_DEVICES)||selectedDeviceName.equals(DISCOVERED_DEVICES)){
+                        deviceName.setText(NO_DEVICE);
+                    } else {
+                        deviceName.setText("Device: " + selectedDeviceName);
+                        selectedDevice = findSelectedDevice();
                     }
                 }
             }
-        }
-
         );
 
         //Takes selected device and goes to the next activity
@@ -135,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
 
                 mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                 if (mBluetoothAdapter == null) {
-                    // Device does not support Bluetooth
+                    Toast.makeText(MainActivity.this, "This device does not support Bluetooth", Toast.LENGTH_LONG).show();
                 } else if (!mBluetoothAdapter.isEnabled()) {
                     Intent enableBT = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                     startActivityForResult(enableBT, REQUEST_ENABLE_BT);
@@ -215,6 +195,29 @@ public class MainActivity extends AppCompatActivity {
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
         registerReceiver(mReceiver, filter);
         mBluetoothAdapter.startDiscovery();
+    }
+
+    private BluetoothDevice findSelectedDevice(){
+        //IS THERE A BETTER WAY??
+        BluetoothDevice btDevice = null;
+        if(pairedDevices != null) {
+            for (BluetoothDevice device : pairedDevices) {
+                if (device.getName().equals(selectedDeviceName)) {
+                    btDevice = device;
+                    break;
+                }
+            }
+        }
+
+        if(discoveredDevices != null) {
+            for (BluetoothDevice device : discoveredDevices) {
+                if (device.getName().equals(selectedDeviceName)) {
+                    btDevice = device;
+                    break;
+                }
+            }
+        }
+        return btDevice;
     }
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {

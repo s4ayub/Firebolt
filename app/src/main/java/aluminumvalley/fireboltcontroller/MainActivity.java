@@ -141,7 +141,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onPause() {
         super.onPause();
-        unregisterReceiver(mReceiver);
+        //if mReciever is registered
+        //unregisterReceiver(mReceiver);
     }
 
     private void searchForConnections() {

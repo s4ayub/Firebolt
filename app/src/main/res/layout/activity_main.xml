@@ -14,14 +14,12 @@ Very first screen user sees when opening the app
     <ListView
         android:id="@+id/device_list"
         android:layout_width="300dp"
-        android:layout_height="100dp"
+        android:layout_height="150dp"
         android:layout_centerInParent="true"
         android:layout_margin="30dp"
         android:background="@android:color/transparent"
         android:choiceMode="singleChoice"
         android:visibility="invisible">
-
-
     </ListView>
 
     <TextView

@@ -17,7 +17,7 @@ Very first screen user sees when opening the app
         android:layout_height="100dp"
         android:layout_centerInParent="true"
         android:layout_margin="30dp"
-        android:background="@drawable/true_background"
+        android:background="@android:color/transparent"
         android:choiceMode="singleChoice"
         android:visibility="invisible">
 
@@ -25,7 +25,7 @@ Very first screen user sees when opening the app
     </ListView>
 
     <TextView
-        android:id="@+id/message"
+        android:id="@+id/main_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@id/device_list"
@@ -67,17 +67,5 @@ Very first screen user sees when opening the app
         android:textAllCaps="false"
 
         android:visibility="visible" />
-
-
-    <TextView
-        android:id="@+id/testTimer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Time"
-        android:textColor="#FFF"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
 
 </RelativeLayout>

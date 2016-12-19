@@ -29,24 +29,27 @@ public class MainActivity extends AppCompatActivity {
     // implementation as the requestCode parameter.
     private final int REQUEST_ENABLE_BT = 1;
 
-    TextView timerTest;
-    TextView message;
-    TextView deviceName;
-    ProgressDialog mProgress;
-    ListView deviceList;
+    private final String NO_DEVICE = "No device selected";
+    private final String PAIRED_DEVICES = "Paired Devices";
+    private final String DISCOVERED_DEVICES = "Discovered Devices";
 
-    BluetoothDevice selectedDevice;
-    String selectedDeviceName;
+    private TextView timerTest;
+    private TextView message;
+    private TextView deviceName;
+    private ProgressDialog mProgress;
+    private ListView deviceList;
 
-    Set<BluetoothDevice> pairedDevices;
-    Set<BluetoothDevice> discoveredDevices;
-    List<String> listAllDevices;
+    private BluetoothDevice selectedDevice;
+    private String selectedDeviceName;
 
-    Button selectorButton;
-    Button searchBTButton;
+    private Set<BluetoothDevice> pairedDevices;
+    private Set<BluetoothDevice> discoveredDevices;
+    private List<String> listAllDevices;
 
-    BluetoothAdapter mBluetoothAdapter;
+    private Button selectorButton;
+    private Button searchBTButton;
 
+    private BluetoothAdapter mBluetoothAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
 
         Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/LobsterTwo-Regular.ttf");
         message.setTypeface(customFont);
+
+        deviceName.setText(NO_DEVICE);
 
         //Takes selected device and goes to the next activity
         selectorButton = (Button) findViewById(R.id.selector_button);
@@ -77,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         );
 
         //Start the bluetooth search
-        searchBTButton = (Button) findViewById(R.id.start_bt_button);
+        searchBTButton = (Button) findViewById(R.id.search_bt_button);
         searchBTButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,20 +119,25 @@ public class MainActivity extends AppCompatActivity {
 
                 view.setSelected(true);
                 selectedDeviceName = (String) parent.getItemAtPosition(position);
-                deviceName.setText("Device: " + selectedDeviceName);
 
-                //IS THERE A BETTER WAY??
-                for (BluetoothDevice device : pairedDevices) {
-                    if(device.getName().equals(selectedDeviceName)) {
-                        selectedDevice = device;
-                        break;
+                if(selectedDeviceName.equals(PAIRED_DEVICES)||selectedDeviceName.equals(DISCOVERED_DEVICES)){
+                    deviceName.setText(NO_DEVICE);
+                }else {
+                    deviceName.setText("Device: " + selectedDeviceName);
+
+                    //IS THERE A BETTER WAY??
+                    for (BluetoothDevice device : pairedDevices) {
+                        if (device.getName().equals(selectedDeviceName)) {
+                            selectedDevice = device;
+                            break;
+                        }
                     }
-                }
 
-                for (BluetoothDevice device : discoveredDevices) {
-                    if(device.getName().equals(selectedDeviceName)) {
-                        selectedDevice = device;
-                        break;
+                    for (BluetoothDevice device : discoveredDevices) {
+                        if (device.getName().equals(selectedDeviceName)) {
+                            selectedDevice = device;
+                            break;
+                        }
                     }
                 }
             }
@@ -151,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //Get paired Bluetooth Devices
-        listAllDevices.add("Paired Devices"); //TODO Remove
+        listAllDevices.add(PAIRED_DEVICES); //TODO Remove
         pairedDevices = mBluetoothAdapter.getBondedDevices();
         if (pairedDevices.size() > 0) {
             for (BluetoothDevice device : pairedDevices) {
@@ -159,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        listAllDevices.add("Discovered Devices"); //TODO Remove
+        listAllDevices.add(DISCOVERED_DEVICES); //TODO Remove
         //Get all available Bluetooth Devices that the phone can discover
         BroadcastReceiver mReceiver = new BroadcastReceiver() {
             public void onReceive(Context context, Intent intent) {

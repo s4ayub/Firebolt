@@ -18,18 +18,22 @@ import java.util.UUID;
 
 public class ControllerActivity extends AppCompatActivity {
 
+    private final String STANDARD_SERIAL_PORT_SERVICE_ID = "00001101-0000-1000-8000-00805f9b34fb";
+
     private boolean deviceConnected;
-    private String deviceName;
     private BluetoothDevice device;
 
     private BluetoothSocket mmSocket;
     private OutputStream mmOutputStream;
     private InputStream mmInputStream;
 
+    private Button mainSwitch;
     private Button forwardButton;
     private Button backwardButton;
 
     private TextView deviceDisplay;
+    private TextView currentPower;
+
     private SeekBar powerControl = null;
 
     @Override
@@ -42,12 +46,17 @@ public class ControllerActivity extends AppCompatActivity {
         device =  getIntent().getExtras().getParcelable("BTDevice");
 
         deviceDisplay = (TextView) findViewById(R.id.currentSelectedDevice);
+        deviceDisplay.setText(device.getName());
+
+        //IF Main switch is turned off make sure no buttons work
+        mainSwitch = (Button) findViewById(R.id.main_switch);
+
         forwardButton = (Button) findViewById(R.id.forward_button);
         forwardButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 if(deviceConnected){
-                    byte msg = 1;
+                    byte msg = (byte) powerControl.getProgress();
                     try {
                         mmOutputStream.write(msg);
                     }catch(Exception e){
@@ -61,7 +70,7 @@ public class ControllerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 if(deviceConnected){
-                    byte msg = -1;
+                    byte msg = (byte) -(powerControl.getProgress()) ;
                     try {
                         mmOutputStream.write(msg);
                     }catch(Exception e){
@@ -71,6 +80,7 @@ public class ControllerActivity extends AppCompatActivity {
             }
         });
 
+        currentPower = (TextView) findViewById(R.id.current_power);
         powerControl = (SeekBar) findViewById(R.id.power_control_bar);
         powerControl.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int progressChanged = 0;
@@ -87,7 +97,8 @@ public class ControllerActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                Toast.makeText(ControllerActivity.this,"seek bar progress:"+progressChanged,
+                currentPower.setText(progressChanged);
+                Toast.makeText(ControllerActivity.this,"seek bar progress:" + progressChanged,
                         Toast.LENGTH_SHORT).show();
             }
         });
@@ -96,16 +107,16 @@ public class ControllerActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
+        if(!deviceConnected) {
+            deviceConnected = connectWithBTDevice();
+        }
 
-        deviceConnected = connectWithBTDevice();
-        deviceDisplay.setText(deviceName);
-
+        currentPower.setText(powerControl.getProgress());
     }
 
     private boolean connectWithBTDevice(){
-        //TODO CHECK THIS ID
         try {
-            UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb"); // Standard SerialPortService ID;
+            UUID uuid = UUID.fromString(STANDARD_SERIAL_PORT_SERVICE_ID);
             mmSocket = device.createRfcommSocketToServiceRecord(uuid);
             mmSocket.connect();
             mmOutputStream = mmSocket.getOutputStream();

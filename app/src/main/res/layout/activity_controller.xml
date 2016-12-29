@@ -47,24 +47,31 @@
                 android:id="@+id/forward_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Forward"/>
+                android:text="Forward" />
 
             <Button
                 android:id="@+id/backwards_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/forward_button"
-                android:text="Backward"/>
+                android:text="Backward" />
+
+            <TextView
+                android:id="@+id/current_power"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/backwards_button"
+                android:padding="20dp"
+                android:textSize="24sp" />
 
             <SeekBar
                 android:id="@+id/power_control_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/backwards_button"
+                android:layout_below="@id/current_power"
                 android:layout_margin="10dp"
-                android:progress="20"
                 android:max="100"
-                />
+                android:progress="20" />
 
         </RelativeLayout>
 

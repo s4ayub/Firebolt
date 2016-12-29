@@ -29,6 +29,8 @@ import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
+    //TODO Be able to pair discovered devices
+
     //The REQUEST_ENABLE_BT constant passed to startActivityForResult()
     // that the system passes back to you in your onActivityResult()
     // implementation as the requestCode parameter.

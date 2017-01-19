@@ -30,6 +30,7 @@ public class ControllerActivity extends AppCompatActivity {
     private Button mainSwitch;
     private Button forwardButton;
     private Button backwardButton;
+    private Button stopButton;
 
     private TextView deviceDisplay;
     private TextView currentPower;
@@ -49,6 +50,7 @@ public class ControllerActivity extends AppCompatActivity {
         deviceDisplay.setText(device.getName());
 
         //IF Main switch is turned off make sure no buttons work
+        //TODO Implement the switch
         mainSwitch = (Button) findViewById(R.id.main_switch);
 
         forwardButton = (Button) findViewById(R.id.forward_button);
@@ -56,9 +58,6 @@ public class ControllerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 if(deviceConnected){
-                    //byte msg = (byte) powerControl.getProgress();
-                    Log.e("PROGRESS VALUE: ", String.valueOf(powerControl.getProgress()));
-                    //byte msg = (byte) 1;
                     try {
                         mmOutputStream.write(String.valueOf(powerControl.getProgress()).getBytes());
                     }catch(Exception e){
@@ -72,11 +71,24 @@ public class ControllerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 if(deviceConnected){
-                    //byte msg = (byte) -(powerControl.getProgress()) ;
-                    Log.e("PROGRESS VALUE: ", String.valueOf(powerControl.getProgress()));
-                    byte msg = (byte) 2;
+                    byte msg = (byte) -(powerControl.getProgress()) ;
                     try {
                         mmOutputStream.write(msg);
+                    }catch(Exception e){
+                        Log.e("ERROR IS: ", e.toString());
+                    }
+                }
+            }
+        });
+
+        stopButton = (Button) findViewById(R.id.stop_button);
+        stopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(deviceConnected) {
+                    String testString = "STOP";
+                    try {
+                        mmOutputStream.write(testString.getBytes());
                     }catch(Exception e){
                         Log.e("ERROR IS: ", e.toString());
                     }

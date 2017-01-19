@@ -34,7 +34,7 @@ public class ControllerActivity extends AppCompatActivity {
     private TextView deviceDisplay;
     private TextView currentPower;
 
-    private SeekBar powerControl = null;
+    private SeekBar powerControl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -56,7 +56,9 @@ public class ControllerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 if(deviceConnected){
-                    byte msg = (byte) powerControl.getProgress();
+                    //byte msg = (byte) powerControl.getProgress();
+                    Log.e("PROGRESS VALUE: ", String.valueOf(powerControl.getProgress()));
+                    byte msg = (byte) 1;
                     try {
                         mmOutputStream.write(msg);
                     }catch(Exception e){
@@ -70,7 +72,9 @@ public class ControllerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 if(deviceConnected){
-                    byte msg = (byte) -(powerControl.getProgress()) ;
+                    //byte msg = (byte) -(powerControl.getProgress()) ;
+                    Log.e("PROGRESS VALUE: ", String.valueOf(powerControl.getProgress()));
+                    byte msg = (byte) 2;
                     try {
                         mmOutputStream.write(msg);
                     }catch(Exception e){
@@ -97,7 +101,7 @@ public class ControllerActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                currentPower.setText(progressChanged);
+                currentPower.setText(String.valueOf(progressChanged));
                 Toast.makeText(ControllerActivity.this,"seek bar progress:" + progressChanged,
                         Toast.LENGTH_SHORT).show();
             }
@@ -111,7 +115,7 @@ public class ControllerActivity extends AppCompatActivity {
             deviceConnected = connectWithBTDevice();
         }
 
-        currentPower.setText(powerControl.getProgress());
+        currentPower.setText(String.valueOf(powerControl.getProgress()));
     }
 
     private boolean connectWithBTDevice(){

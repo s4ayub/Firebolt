@@ -58,9 +58,8 @@ public class ControllerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 if(deviceConnected){
-                    byte msg = (byte) powerControl.getProgress();
                     try {
-                        mmOutputStream.write(msg);
+                        mmOutputStream.write(String.valueOf(powerControl.getProgress()).getBytes());
                     }catch(Exception e){
                         Log.e("ERROR IS: ", e.toString());
                     }

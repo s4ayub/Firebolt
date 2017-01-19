@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
             Log.e("Current State: ", String.valueOf(mBluetoothAdapter.getState()));
         }
         getPairedBTDevices();
-        getDiscoveredBTDevices();
+        //getDiscoveredBTDevices();
     }
 
     private void finishedSearchingForConnections() {
@@ -180,6 +180,7 @@ public class MainActivity extends AppCompatActivity {
             for (BluetoothDevice device : pairedDevices) {
                 listAllDevices.add(device.getName());
             }
+            finishedSearchingForConnections();
         }
     }
 

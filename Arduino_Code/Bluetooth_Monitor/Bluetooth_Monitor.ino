@@ -3,7 +3,6 @@
 //Pin Mappings
 #define BLUETOOTH_RX 0
 #define BLUETOOTH_TX 1
-#define BUFFER_SIZE 10
 
 //Constants
 #define BLUETOOTH_BAUD_RATE   57600
@@ -22,26 +21,20 @@ void setup() {
 void loop() {
 
   //Checks for incoming bytes from bluetooth, saves into string
-/*  if (bluetooth.available()) {
-    //char inputFromBluetoothChar;
+  if (bluetooth.available()) {
+    char inputFromBluetoothChar;
     while (bluetooth.available()) {
-      //inputFromBluetoothChar = bluetooth.read();
-      //inputFromBluetoothString += inputFromBluetoothChar;
+      delay(10);
+      Serial.println(bluetooth.read());
+      inputFromBluetoothChar = bluetooth.read();
+      inputFromBluetoothString += inputFromBluetoothChar;
     }
-  }*/
+  }
 
   //Prints existing string from bluetooth to serial monitor
-/*  if(inputFromBluetoothString != "") {
+  if(inputFromBluetoothString != "") {
     Serial.println(inputFromBluetoothString);
     inputFromBluetoothString = "";
-  }*/
-
-  if (bluetooth.available()) {
-    byte msg;
-    while (bluetooth.available()) {
-      msg = bluetooth.read();
-      Serial.println(msg);
-    }
   }
    
 }

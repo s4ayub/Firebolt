@@ -58,9 +58,9 @@ public class ControllerActivity extends AppCompatActivity {
                 if(deviceConnected){
                     //byte msg = (byte) powerControl.getProgress();
                     Log.e("PROGRESS VALUE: ", String.valueOf(powerControl.getProgress()));
-                    byte msg = (byte) 1;
+                    //byte msg = (byte) 1;
                     try {
-                        mmOutputStream.write(msg);
+                        mmOutputStream.write(String.valueOf(powerControl.getProgress()).getBytes());
                     }catch(Exception e){
                         Log.e("ERROR IS: ", e.toString());
                     }

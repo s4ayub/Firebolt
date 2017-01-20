@@ -14,6 +14,8 @@
 #define MAX_MOTOR_SPEED_REVERSE       61
 #define MOTOR_STOP_VALUE              91
 #define INCREMENT_DELAY               20
+#define INCREMENT_ACCELERATE          1
+#define INCREMENT_DECELERATE          -1
 
 //Initialization of Bluetooth Module
 SoftwareSerial bluetooth(BLUETOOTH_RX, BLUETOOTH_TX);
@@ -50,6 +52,19 @@ void setup() {
   victorSP.attach(VICTOR_SP_PIN);
 }
 
+// Gradually changes motor speed
+void changeMotorSpeed(requestedSpeed) {
+  int newMotorSpeed = map(requestedSpeed.toInt(), MAX_REQUESTED_SPEED_REVERSE, MAX_REQUESTED_SPEED_FORWARD, MAX_MOTOR_SPEED_REVERSE, MAX_MOTOR_SPEED_FORWARD);
+  currentMotorSpeed < newMotorSpeed ? speedIncrement = INCREMENT_ACCELERATE : speedIncrement = INCREMENT_DECELERATE;
+  if (currentMotorSpeed < newMotorSpeed) {
+    for (int i = 0; i < abs(currentMotorSpeed - newMotorSpeed); i += abs(speedIncrement)) {
+      currentMotorSpeed += speedIncrement;
+      victorSP.write(currentMotorSpeed);
+      delay(INCREMENT_DELAY);
+    }
+  }
+}
+
 void loop() {
 
   //Checks for incoming bytes from bluetooth, saves into string
@@ -68,20 +83,8 @@ void loop() {
     //Serial.println(requestedSpeed);
     
     //When requestedSpeed is a valid number, sets motor to requestedSpeed
-    if(isValidNumber(requestedSpeed)){
-      int newMotorSpeed = map(requestedSpeed.toInt(), MAX_REQUESTED_SPEED_REVERSE, MAX_REQUESTED_SPEED_FORWARD, MAX_MOTOR_SPEED_REVERSE, MAX_MOTOR_SPEED_FORWARD);
-      if (currentMotorSpeed < newMotorSpeed) {
-        for (int i = currentMotorSpeed; i < newMotorSpeed; i++){
-          victorSP.write(i);
-          delay(INCREMENT_DELAY);
-        }
-      }
-      else {
-        for (int i = currentMotorSpeed; i > newMotorSpeed; i--){
-          victorSP.write(i);
-          delay(INCREMENT_DELAY);
-        }
-      }
+    if(isValidNumber(requestedSpeed)) {
+      changeMotorSpeed(requestedSpeed);
     }
 
     //When Stop Button on App is Pressed, Stops Motor
@@ -91,5 +94,4 @@ void loop() {
     
     requestedSpeed = "";
   }
-   
 }

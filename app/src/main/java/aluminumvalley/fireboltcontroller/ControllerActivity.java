@@ -19,6 +19,7 @@ import java.util.UUID;
 public class ControllerActivity extends AppCompatActivity {
 
     private final String STANDARD_SERIAL_PORT_SERVICE_ID = "00001101-0000-1000-8000-00805f9b34fb";
+    private final String EMERGENCY_STOP = "EMERGENCY STOP";
 
     private boolean deviceConnected;
     private BluetoothDevice device;
@@ -59,6 +60,9 @@ public class ControllerActivity extends AppCompatActivity {
             public void onClick(View v){
                 if(deviceConnected){
                     try {
+                        if(!mmSocket.isConnected()){
+                            mmSocket.connect();
+                        }
                         mmOutputStream.write(String.valueOf(powerControl.getProgress()).getBytes());
                     }catch(Exception e){
                         Log.e("ERROR IS: ", e.toString());
@@ -71,9 +75,11 @@ public class ControllerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 if(deviceConnected){
-                    byte msg = (byte) -(powerControl.getProgress()) ;
                     try {
-                        mmOutputStream.write(msg);
+                        if(!mmSocket.isConnected()){
+                            mmSocket.connect();
+                        }
+                        mmOutputStream.write(String.valueOf( (-1) * powerControl.getProgress()).getBytes());
                     }catch(Exception e){
                         Log.e("ERROR IS: ", e.toString());
                     }
@@ -86,9 +92,11 @@ public class ControllerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(deviceConnected) {
-                    String testString = "STOP";
                     try {
-                        mmOutputStream.write(testString.getBytes());
+                        if(!mmSocket.isConnected()){
+                            mmSocket.connect();
+                        }
+                        mmOutputStream.write(EMERGENCY_STOP.getBytes());
                     }catch(Exception e){
                         Log.e("ERROR IS: ", e.toString());
                     }
@@ -126,7 +134,6 @@ public class ControllerActivity extends AppCompatActivity {
         if(!deviceConnected) {
             deviceConnected = connectWithBTDevice();
         }
-
         currentPower.setText(String.valueOf(powerControl.getProgress()));
     }
 

@@ -27,6 +27,20 @@ Servo victorSP;
 String requestedSpeed;
 int currentMotorSpeed = MOTOR_STOP_VALUE;
 
+// Gradually changes motor speed
+void changeMotorSpeed(String requestedSpeed) {
+  int speedIncrement;
+  int newMotorSpeed = map(requestedSpeed.toInt(), MAX_REQUESTED_SPEED_REVERSE, MAX_REQUESTED_SPEED_FORWARD, MAX_MOTOR_SPEED_REVERSE, MAX_MOTOR_SPEED_FORWARD);
+  currentMotorSpeed < newMotorSpeed ? speedIncrement = INCREMENT_ACCELERATE : speedIncrement = INCREMENT_DECELERATE;
+  if (currentMotorSpeed < newMotorSpeed) {
+    for (int i = 0; i < abs(currentMotorSpeed - newMotorSpeed); i += abs(speedIncrement)) {
+      currentMotorSpeed += speedIncrement;
+      victorSP.write(currentMotorSpeed);
+      delay(INCREMENT_DELAY);
+    }
+  }
+}
+
 //Function to Check if String is A Positive or Negative Number
 bool isValidNumber (String str) {
   int startingCounter = 0;
@@ -50,19 +64,6 @@ void setup() {
 
   //Assigns Motor Controller to Specified Pin
   victorSP.attach(VICTOR_SP_PIN);
-}
-
-// Gradually changes motor speed
-void changeMotorSpeed(requestedSpeed) {
-  int newMotorSpeed = map(requestedSpeed.toInt(), MAX_REQUESTED_SPEED_REVERSE, MAX_REQUESTED_SPEED_FORWARD, MAX_MOTOR_SPEED_REVERSE, MAX_MOTOR_SPEED_FORWARD);
-  currentMotorSpeed < newMotorSpeed ? speedIncrement = INCREMENT_ACCELERATE : speedIncrement = INCREMENT_DECELERATE;
-  if (currentMotorSpeed < newMotorSpeed) {
-    for (int i = 0; i < abs(currentMotorSpeed - newMotorSpeed); i += abs(speedIncrement)) {
-      currentMotorSpeed += speedIncrement;
-      victorSP.write(currentMotorSpeed);
-      delay(INCREMENT_DELAY);
-    }
-  }
 }
 
 void loop() {

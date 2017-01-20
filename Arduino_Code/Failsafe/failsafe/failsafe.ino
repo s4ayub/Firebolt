@@ -13,18 +13,22 @@ SoftwareSerial bluetooth(BLUETOOTH_RX, BLUETOOTH_TX);
 //Global variables
 bool bluetoothConnectionFlag = 0;
 String messageFromBluetooth;
+int interruptCounter = 0;
 
 void checkBluetoothConnection() {
+  bluetoothConnectionFlag = false;
   bluetooth.print("AT");
   if (bluetooth.available()) {
-    char charFromBluetooth;
+    //char charFromBluetooth;
     while (bluetooth.available()) {
-    delay(10);
-    messageFromBluetooth += charFromBluetooth;
+    delay(200);
+    Serial.print(bluetooth.read());
+    //messageFromBluetooth += charFromBluetooth;
     }
   }
+  //Serial.println(messageFromBluetooth);
   if (messageFromBluetooth != "OK") {
-    Serial.print("Turn down motor");
+    //Serial.println("Turn down motor");
   }
   messageFromBluetooth = "";
 }
@@ -32,13 +36,19 @@ void checkBluetoothConnection() {
 void interruptSetup() {
   noInterrupts();
   TCCR2B = 0;
-  TCCR2B |= (1 << CS20);
+  TCCR2B |= (1 << (CS22 + CS20));
   TIMSK2 |= (1 << TOIE1);
   interrupts();
 }
 
 ISR(TIMER2_OVF_vect) {
-  bluetoothConnectionFlag ^= true;
+  noInterrupts();
+  interruptCounter++;
+  if (interruptCounter == 1000) {
+    bluetoothConnectionFlag = true;
+    interruptCounter = 0;
+  }
+  interrupts();
 }
 
 void setup() {
@@ -52,7 +62,8 @@ void setup() {
 }
 
 void loop() {
+  //Serial.println(bluetoothConnectionFlag);
   if (bluetoothConnectionFlag) {
-    checkBluetoothConnection;
+    checkBluetoothConnection();
   }
 }

@@ -32,13 +32,12 @@ void checkBluetoothConnection() {
 void interruptSetup() {
   noInterrupts();
   TCCR2B = 0;
-  TCCR2B |= CS20;
-  TIMSK2 |= TOIE;
+  TCCR2B |= (1 << CS20);
+  TIMSK2 |= (1 << TOIE1);
   interrupts();
 }
 
-//Possible alternatives: TIM2_OVF, Timer2_OVF_vect
-void ISR(TIMER2_OVF) {
+ISR(TIMER2_OVF_vect) {
   bluetoothConnectionFlag ^= true;
 }
 
@@ -48,8 +47,12 @@ void setup() {
 
   //Sets Bluetooth to Specified Baud Rate
   bluetooth.begin(BLUETOOTH_BAUD_RATE);
+
+  interruptSetup();
 }
 
 void loop() {
-  bluetoothConnectionFlag ? checkBluetoothConnection :
+  if (bluetoothConnectionFlag) {
+    checkBluetoothConnection;
+  }
 }

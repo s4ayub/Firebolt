@@ -13,9 +13,7 @@
 #define MAX_MOTOR_SPEED_FORWARD       121
 #define MAX_MOTOR_SPEED_REVERSE       61
 #define MOTOR_STOP_VALUE              91
-#define INCREMENT_DELAY               20
-#define INCREMENT_ACCELERATE          1
-#define INCREMENT_DECELERATE          -1
+#define INCREMENT_DELAY               100
 
 //Initialization of Bluetooth Module
 SoftwareSerial bluetooth(BLUETOOTH_RX, BLUETOOTH_TX);
@@ -29,16 +27,22 @@ int currentMotorSpeed = MOTOR_STOP_VALUE;
 
 // Gradually changes motor speed
 void changeMotorSpeed(String requestedSpeed) {
+ 
   int speedIncrement;
   int newMotorSpeed = map(requestedSpeed.toInt(), MAX_REQUESTED_SPEED_REVERSE, MAX_REQUESTED_SPEED_FORWARD, MAX_MOTOR_SPEED_REVERSE, MAX_MOTOR_SPEED_FORWARD);
-  currentMotorSpeed < newMotorSpeed ? speedIncrement = INCREMENT_ACCELERATE : speedIncrement = INCREMENT_DECELERATE;
   if (currentMotorSpeed < newMotorSpeed) {
-    for (int i = 0; i < abs(currentMotorSpeed - newMotorSpeed); i += abs(speedIncrement)) {
-      currentMotorSpeed += speedIncrement;
-      victorSP.write(currentMotorSpeed);
+    for (int i = currentMotorSpeed; i < newMotorSpeed; i++){
+      victorSP.write(i);
       delay(INCREMENT_DELAY);
     }
   }
+  else {
+    for (int i = currentMotorSpeed; i > newMotorSpeed; i--){
+      victorSP.write(i);
+      delay(INCREMENT_DELAY);
+    }
+  }
+  currentMotorSpeed = newMotorSpeed;
 }
 
 //Function to Check if String is A Positive or Negative Number
@@ -91,6 +95,7 @@ void loop() {
     //When Stop Button on App is Pressed, Stops Motor
     else if(requestedSpeed == "STOP"){
       victorSP.write(MOTOR_STOP_VALUE);
+      currentMotorSpeed = MOTOR_STOP_VALUE;
     }
     
     requestedSpeed = "";
